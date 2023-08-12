@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
@@ -10,21 +10,30 @@ const Login = (props) => {
   const [enteredPassword, setEnteredPassword] = useState('');
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+  const [collegeName,setCollegeName]=useState('');
+  const [collegeNameIsVaid,setCollegeNameIsValid]=useState();
+
+  // to validate the form-validation by checking mail, password, collegeName
+  useEffect(()=>{
+    setFormIsValid(
+      enteredEmail.includes('@') && enteredPassword.trim().length > 6 && collegeName.trim().length > 1
+    );
+  },[enteredEmail,enteredPassword,collegeName]);
+
+  const collegeNameChangeHandler=(event)=>{
+    setCollegeName(event.target.value);
+  }
+
+  const validateCollegeNameHandler=()=>{
+    setCollegeNameIsValid(collegeName.trim().length > 1);
+  }
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
-
-    setFormIsValid(
-      event.target.value.includes('@') && enteredPassword.trim().length > 6
-    );
   };
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
-
-    setFormIsValid(
-      event.target.value.trim().length > 6 && enteredEmail.includes('@')
-    );
   };
 
   const validateEmailHandler = () => {
@@ -69,6 +78,20 @@ const Login = (props) => {
             value={enteredPassword}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
+          />
+        </div>
+        <div
+          className={`${classes.control} ${
+            collegeNameIsVaid === false ? classes.invalid : ''
+          }`}
+        >
+          <label htmlFor="collegeName">College Name</label>
+          <input
+            type="text"
+            id="collegeName"
+            value={collegeName}
+            onChange={collegeNameChangeHandler}
+            onBlur={validateCollegeNameHandler}
           />
         </div>
         <div className={classes.actions}>
