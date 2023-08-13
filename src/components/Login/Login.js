@@ -33,29 +33,31 @@ const Login = (props) => {
   // const [collegeNameIsVaid,setCollegeNameIsValid]=useState();
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: "",
-    isValid: undefined,
+    isValid: null,
   });
   const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
     value: "",
-    isValid: undefined,
+    isValid: null,
   });
-  // to validate the form-validation by checking mail, password, collegeName
-  // useEffect(()=>{
-  //   setFormIsValid(
-  //     enteredEmail.includes('@') && enteredPassword.trim().length > 6 && collegeName.trim().length > 1
-  //   );
-  // },[enteredEmail,enteredPassword,collegeName]);
+  // to validate the form-validation by checking email's & password's valid-States only
+  const {isValid:emailValid}=emailState;
+  const {isValid:passwordValid}=passwordState;
+  useEffect(()=>{
+    setFormIsValid(
+      emailValid && passwordValid
+    );
+  },[emailValid,passwordValid]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
-    setFormIsValid(
-      event.target.value.includes("@") && passwordState.isValid
-    );
+    // setFormIsValid(
+    //   event.target.value.includes("@") && passwordState.isValid
+    // );
   };
 
   const passwordChangeHandler = (event) => {
     dispatchPassword({type:"USER_INPUT",val:event.target.value})
-    setFormIsValid(emailState.isValid && event.target.value.trim().length > 6);
+    // setFormIsValid(emailState.isValid && event.target.value.trim().length > 6);
   };
 
   const validateEmailHandler = () => {
